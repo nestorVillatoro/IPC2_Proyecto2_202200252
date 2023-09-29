@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<config>
+    <listaDrones>
+        <dron>DronA</dron>
+        <dron>DronB</dron>
+        <dron>DronC</dron>
+    </listaDrones>
+    <listaSistemasDrones>
+        <sistemaDrones nombre="Sistema1">
+            <alturaMaxima>5</alturaMaxima>
+            <cantidadDrones>3</cantidadDrones>
+            <contenido>
+                <dron>DronA</dron>
+                <alturas>
+                    <altura valor="1">H</altura>
+                    <altura valor="2">B</altura>
+                    <altura valor="3">U</altura>
+                    <altura valor="4">A</altura>
+                    <altura valor="5"> </altura>
+                </alturas>
+                <dron>DronB</dron>
+                <alturas>
+                    <altura valor="1">F</altura>
+                    <altura valor="2">O</altura>
+                    <altura valor="3">H</altura>
+                    <altura valor="4">I</altura>
+                    <altura valor="5">W</altura>
+                </alturas>
+                <dron>DronC</dron>
+                <alturas>
+                    <altura valor="1">K</altura>
+                    <altura valor="2">L</altura>
+                    <altura valor="3">U</altura>
+                    <altura valor="4">L</altura>
+                    <altura valor="5">O</altura>
+                </alturas>
+            </contenido>
+        </sistemaDrones>
+    </listaSistemasDrones>
+    <listaMensajes>
+        <Mensaje nombre="Mensaje1">
+            <sistemaDrones>Sistema1</sistemaDrones>
+            <instrucciones>
+                <instruccion dron="DronA">1</instruccion>
+                <instruccion dron="DronB">2</instruccion>
+                <instruccion dron="DronC">4</instruccion>
+                <instruccion dron="DronA">4</instruccion>
+                <instruccion dron="DronA">5</instruccion>
+                <instruccion dron="DronC">3</instruccion>
+                <instruccion dron="DronB">5</instruccion>
+                <instruccion dron="DronA">3</instruccion>
+            </instrucciones>
+        </Mensaje>
+    </listaMensajes>
+</config>
