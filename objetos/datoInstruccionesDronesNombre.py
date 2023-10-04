@@ -1,16 +1,17 @@
 class datoInstruccionesDronesNombre:
 
-    def __init__(self, lista, nombre):
-        self.Lista = lista
-        self.Nombre = nombre
+    def __init__(self, nombre, columna):
+        self.nombre=nombre
+        self.columna=columna
 
-    def ObtenerLista(self):
-        return self.Lista
-    
     def ObtenerNombre(self):
-        return self.Nombre
+        return self.nombre
     
-    def EncontroNombre(self, Nombre):
-        if self.Nombre == Nombre:
-            return True
-        return False
+    def ObtenerColumna(self):
+        return self.columna
+
+    def imprimirInstrucciones(self):
+        print(str(self.columna.ImprimirColumna()))
+
+    def obtenerInstrucciones(self):
+        return(str((self.columna.DatosColumna())))

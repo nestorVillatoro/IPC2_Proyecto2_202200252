@@ -19,3 +19,12 @@ class NodoSimple:
 
     def Buscar(self, Nombre):
         return self.Dato.EncontroNombre(Nombre)
+    
+    def AsignarSiguiente(self, valorsiguiente):
+        self.Siguiente = valorsiguiente
+
+    def ObtenerDato(self):
+        return self.Dato
+    
+    def CambiarDato(self, NuevoDato):
+        self.Dato = NuevoDato

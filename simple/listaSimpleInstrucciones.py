@@ -1,13 +1,33 @@
-from .nodoSimple import NodoSimple
+class nodoSimpleInstrucciones:
 
-class ListaSimple:
+    def __init__(self, Dato):
+        self.Dato = Dato
+        self.Siguiente = None
+
+    
+    def ObtenerNombre(self):
+        return self.Dato.ObtenerNombre()
+    
+    def ObtenerIndice(self):
+        return self.Dato.ObtenerAltura()
+    
+    def ObtenerSiguiente(self):
+        return self.Siguiente
+    
+    def SetSiguiente(self, NodoS):
+        self.Siguiente = NodoS
+
+    def Buscar(self, Nombre):
+        return self.Dato.EncontroNombre(Nombre)
+
+class ListaSimpleInstrucciones:
 
     def __init__(self):
         self.Inicio = None
         self.Final = None
 
     def Insertar(self, Dato):
-        NuevoNodo = NodoSimple(Dato)
+        NuevoNodo = nodoSimpleInstrucciones(Dato)
 
         if self.Inicio == None:
             self.Inicio = NuevoNodo
@@ -111,20 +131,3 @@ class ListaSimple:
             return True
         else:
             print("Lista Vacía")
-
-    def InicializarSistema(self):
-        self.Inicio = None
-        self.Final = None
-        self.Contador = 0
-
-    def ordenarLista(self):
-        if not self.Inicio:
-            return
-        actual = self.Inicio
-        while actual:
-            siguiente = actual.Siguiente
-            while siguiente:
-                if actual.Dato.ObtenerNombre() > siguiente.Dato.ObtenerNombre():
-                    actual.Dato, siguiente.Dato = siguiente.Dato, actual.Dato
-                siguiente = siguiente.Siguiente
-            actual = actual.Siguiente

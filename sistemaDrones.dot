@@ -1,0 +1,5 @@
+digraph G {
+	node [shape=circle]
+	nodo0 [label = "sistemas de drones"]
+	nodo0[fontcolor = black]
+}

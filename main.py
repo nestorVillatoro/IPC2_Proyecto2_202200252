@@ -2,18 +2,31 @@ import tkinter as tk
 from tkinter import filedialog
 from tkinter.scrolledtext import ScrolledText
 import xml.etree.ElementTree as ET
-import doble.listaDoble as listaDoble
+import simple.listaSistemas as listaSistemas
+import simple.listaMensajes as listaMensajes
+import doble.lista_de_columna as lista_de_columna
 import simple.listaSimple as listaSimple
+import simple.listaSimpleInstrucciones as listaSimpleInstrucciones
+import simple.listaSimpleColumnas as listaSimpleColumnas
+import simple.listaInstrucciones as listaInstrucciones
 import objetos.datoDron as datoDron
 import objetos.datoSistemaDronesNombre as datoSistemaDronesNombre
 import objetos.datoAlturasMaximas as datoAlturasMaximas
 import objetos.datoCantidadDrones as datoCantidadDrones
 import objetos.datoDronesdelSistema as datoDronesdelSistema
-import objetos.datoInstruccionesDrones as datoInstruccionesDrones
+import objetos.datoMensajesNombres as datoMensajesNombres
+import objetos.datoMensaje as datoMensaje
+import objetos.datoMensajesSistemaDrones as datoMensajesSistemaDrones
 import objetos.datoInstruccionesDronesNombre as datoInstruccionesDronesNombre
+import objetos.datoMensajesInstrucciones as datoMensajesInstrucciones
+import objetos.datoInstrucciones as datoInstrucciones
+import objetos.contador as datoContador
+import objetos.datoSistemasDrones as datoSistemasDrones
 import objetos.datoAlturasValores as datoAlturasValores
 from tkinter import filedialog, messagebox
-from tkinter import ttk
+from tkinter import Toplevel
+import os
+
 global listaDrones
 listaDrones = None
 global contadorDrones
@@ -44,11 +57,38 @@ listaAlturasValores = None
 global contadorAlturasValores
 contadorAlturasValores = 0
 
+global listaMensajesNombres
+listaMensajesNombres = None
+global contadorMensajesNombres
+contadorMensajesNombres = 0
+
+global listaMensajesSistemaDrones
+listaMensajesSistemaDrones = None
+global contadorMensajesSistemaDrones
+contadorMensajesSistemaDrones = 0
+
+global listaMensajesInstrucciones
+listaMensajesInstrucciones = None
+global contadorMensajesInstrucciones
+contadorMensajesInstrucciones = 0
+
+global listaInst
+listaInst = listaInstrucciones.ListaInstrucciones()
+
+global listaMensajesInstrucciones2
+listaMensajesInstrucciones2 = None
+
 global listaDobleInstruccionesDrones 
 listaDobleInstruccionesDrones = None
 
 global listaInstruccionesDronesNombre
 listaInstruccionesDronesNombre = None
+
+global listaSistemasD
+listaSistemasD = listaSistemas.ListaSistemas()
+
+global listaCantInstrucciones
+listaCantInstrucciones = None
 
 class TextEditorApp:
     def __init__(self, root):
@@ -82,6 +122,7 @@ class TextEditorApp:
 
         self.file_menu.add_command(label="Sistemas de drones", command=self.sistemaDrones)
         self.menu_bar.add_command(label="Inicializar", command=self.inicializar)
+        self.menu_bar.add_command(label="Ayuda", command=self.ayuda)
 
     global verificador 
     verificador= False
@@ -125,6 +166,24 @@ class TextEditorApp:
         listaAlturasValores = listaSimple.ListaSimple()
         global contadorAlturasValores
 
+        global listaMensajesNombres
+        listaMensajesNombres = listaSimple.ListaSimple()
+        global contadorMensajesNombres
+
+        global listaMensajesSistemaDrones
+        listaMensajesSistemaDrones = listaSimple.ListaSimple()
+        global contadorMensajesSistemaDrones
+
+        global listaMensajesInstrucciones
+        listaMensajesInstrucciones = listaSimpleInstrucciones.ListaSimpleInstrucciones()
+        global contadorMensajesInstrucciones
+
+        global listaMensajesInstrucciones2
+        listaMensajesInstrucciones2 = listaSimple.ListaSimple()
+
+        global listaCantInstrucciones
+        listaCantInstrucciones = listaSimple.ListaSimple()
+
         for elementos in raiz:
             for drones in elementos.findall("dron"):
                 contadorDrones += 1
@@ -152,7 +211,6 @@ class TextEditorApp:
                         nombreDrones = str(dronesSistema.text)
                         DronesdelSistema = datoDronesdelSistema.datoDronesdelSistema(nombreDrones, contadorDronesdelSistema)
                         listaDronesdelSistema.Insertar(DronesdelSistema)
-                        print("dron del sistema: " + nombreDrones)
                     for alturas in contenido.findall("alturas"):
                         for alturaSistema in alturas.findall("altura"):
                             contadorAlturasValores += 1
@@ -161,16 +219,28 @@ class TextEditorApp:
                             AlturasValores = datoAlturasValores.datoAlturasValores(valor, alturaValor, contadorAlturasValores)
                             listaAlturasValores.Insertar(AlturasValores)
             for Mensaje in  elementos.findall("Mensaje"):
+                contadorMensajesNombres += 1
                 nombreMensaje = str(Mensaje.get("nombre"))
-                print("el nombre del mensaje es: " + nombreMensaje)
+                MensajesNombres = datoMensajesNombres.datoMensajesNombres(nombreMensaje, contadorMensajesNombres)
+                listaMensajesNombres.Insertar(MensajesNombres)
                 for sistemadeDrones in  Mensaje.findall("sistemaDrones"):
-                    sistema = str(sistemadeDrones .text)
-                    print("el sistema de drones que se utiliza es: " + sistema)
+                    contadorMensajesSistemaDrones += 1
+                    sistema = str(sistemadeDrones.text)
+                    MensajesSistemaDrones = datoMensajesSistemaDrones.datoMensajesSistemaDrones(sistema, contadorMensajesSistemaDrones)
+                    listaMensajesSistemaDrones.Insertar(MensajesSistemaDrones)
                 for instrucciones in  Mensaje.findall("instrucciones"):
+                    contador = 0
                     for instruccion in instrucciones.findall("instruccion"):
+                        contador += 1
+                        contadorMensajesInstrucciones += 1
                         dron = str(instruccion.get("dron"))
                         alturaDron = str(instruccion.text)
-                        print("El dron " + dron + " se mueve a la altura " + alturaDron)
+                        MensajesInstrucciones = datoMensajesInstrucciones.datoMensajesInstrucciones(dron, contadorMensajesInstrucciones)
+                        MensajesInstrucciones2 = datoMensajesInstrucciones.datoMensajesInstrucciones(alturaDron, contadorMensajesInstrucciones)
+                        listaMensajesInstrucciones.Insertar(MensajesInstrucciones)
+                        listaMensajesInstrucciones2.Insertar(MensajesInstrucciones2)
+                    elContador = datoContador.datoContador(contador)
+                    listaCantInstrucciones.Insertar(elContador)
         print("listaDrones:")
         listaDrones.ImprimirElmentos()
         print("\nlistaSistemaDronesNombre:")
@@ -183,42 +253,61 @@ class TextEditorApp:
         listaDronesdelSistema.ImprimirElmentos()
         print("\nlistaAlturasValores:")
         listaAlturasValores.ImprimirElmentos()
+        print("\nlistaMensajesNombres:")
+        listaMensajesNombres.ImprimirElmentos()
+        print("\nlistaMensajesSistemaDrones:")
+        listaMensajesSistemaDrones.ImprimirElmentos()
+        print("\n")
+        
 
-    def generarArchivo(self):
-        global listaSistemaDronesNombre
-        global contadorSistemaDronesNombre
-        global listaAturasMaximasl
-        global contadorAlturasMaximas
-        global listaCantidadDrones
-        global contadorCantidadDrones
-        global listaDronesdelSistema
-        global contadorDronesdelSistema
-        global listaAlturasValores
-        global contadorAlturasValores
+
         global listaDobleInstruccionesDrones
         global listaInstruccionesDronesNombre
-
-        for i in range(contadorAlturasMaximas):
+        global listaSistemasD
+        global listaInst 
+        for i in range(contadorSistemaDronesNombre):
             var1 = int(listaAlturasMaximas.Pop().ObtenerNombre())
-            for j in range(contadorCantidadDrones):
-                var2 = int(listaCantidadDrones.Pop().ObtenerNombre())
-                for k in range(var2):
-                    listaInstruccionesDronesNombre = listaSimple.ListaSimple()
-                    listaDobleInstruccionesDrones = listaDoble.ListaDoble()
-                    contador = 1
-                    for l in range(var1):
-                        nombreAltura = listaAlturasValores.Pop().ObtenerNombre()
-                        InstruccionesDrones = datoInstruccionesDrones.datoInstruccionesDrones(contador, nombreAltura)
-                        listaDobleInstruccionesDrones.Insertar(InstruccionesDrones)
-                        contador +=1
-                        l += 1
-                    nombre = listaDronesdelSistema.Pop().ObtenerNombre()
-                    InstruccionesDronesNombre = datoInstruccionesDronesNombre.datoInstruccionesDronesNombre(listaDobleInstruccionesDrones, nombre)
-                    listaInstruccionesDronesNombre.Insertar(InstruccionesDronesNombre)
-                    k += 1
-                j += 1
+            var2 = int(listaCantidadDrones.Pop().ObtenerNombre())
+            nombreSistema = listaSistemaDronesNombre.Pop().ObtenerNombre()
+            listaInstruccionesDronesNombre = listaSimpleColumnas.ListaSimpleColumnas()
+            for k in range(var2):    
+                listaDobleInstruccionesDrones = lista_de_columna.Columna()
+                nombre = listaDronesdelSistema.Pop().ObtenerNombre()
+                for l in range(var1):
+                    nombreAltura = listaAlturasValores.Pop().ObtenerNombre()
+                    listaDobleInstruccionesDrones.Insertar(nombreAltura)
+                    l += 1
+                        
+                InstruccionesDronesNombre = datoInstruccionesDronesNombre.datoInstruccionesDronesNombre(nombre, listaDobleInstruccionesDrones)
+                listaInstruccionesDronesNombre.Insertar(InstruccionesDronesNombre)
+                
+                k += 1
             i += 1
-        print(listaInstruccionesDronesNombre.Pop().ObtenerIndice())
+            SistemaDrones = datoSistemasDrones.datoSistemasDrones(nombreSistema, var1, var2, listaInstruccionesDronesNombre)
+            listaSistemasD.Insertar(SistemaDrones)
+        listaSistemasD.ImprimirSistemas()
+
+        for m in range(contadorMensajesNombres):
+            var3 = listaMensajesNombres.Pop().ObtenerNombre()
+            var4 = listaMensajesSistemaDrones.Pop().ObtenerNombre()
+            var5 = int(listaCantInstrucciones.Pop().ObtenerNombre())
+            listaDronesAlturas = listaMensajes.ListaMensajes()
+            for n in range(var5):
+                name = str(listaMensajesInstrucciones.Pop().ObtenerNombre()) 
+                alt = str(listaMensajesInstrucciones2.Pop().ObtenerNombre())
+                mensaje = datoMensaje.mensaje(name, alt)
+                listaDronesAlturas.Insertar(mensaje)
+                n += 1
+            print(var3)
+            print(var4)
+            listaDronesAlturas.Imprimir()
+            mensajes = datoInstrucciones.instrucciones(var3, var4, listaDronesAlturas)
+            listaInst.Insertar(mensajes)
+            m += 1
+        #listaInst.ImprimirMensajes()
+
+    def generarArchivo(self):
+        pass
         
     
     def update_line_numbers(self, event=None):
@@ -234,34 +323,123 @@ class TextEditorApp:
     def listaDrones(self):
         global listaDrones
         if listaDrones != None:
-                if listaDrones.obtenerElementos != "Lista Vacía":
-                    resultado = listaDrones.obtenerElementos()
-                    print(resultado)
-                    messagebox.showinfo("Lista de drones", str(resultado))
-                else:        
-                    messagebox.showinfo("Error", "No se ha ingresado ningún dron")
+            if listaDrones.obtenerElementos != "Lista Vacía":
+                listaDrones.ordenarLista()
+                resultado = listaDrones.obtenerElementos()
+                print(resultado)
+                messagebox.showinfo("Lista de drones", str(resultado))
+            else:        
+                messagebox.showinfo("Error", "No se ha ingresado ningún dron")
         else:        
             messagebox.showinfo("Error", "No se ha ingresado ningún dron")
     
     def agregarDron(self):
         global listaDrones
         global contadorDrones
-        dron = "DronX"
-        verificador = listaDrones.buscarElmentos(dron)
-        if verificador == True:
-            contadorDrones += 1
-            Dron = datoDron.datoDron(dron, contadorDrones)
-            listaDrones.Insertar(Dron)
-            messagebox.showinfo("Dron añadido!", "Se añadió el dron exitosamente!")
-        else:        
-            messagebox.showinfo("Error", "Este dron ya existe!")
+        nueva_ventana = Toplevel()
+        nueva_ventana.geometry("350x100")
+        nueva_ventana.title("Agregar Dron")
+
+        label_texto = tk.Label(nueva_ventana, text="Ingrese el nombre del Dron:")
+        label_texto.pack()
+        entrada = tk.Entry(nueva_ventana)
+        entrada.pack()
+
+        def obtenertexto():
+            dronIngresado=entrada.get()
+            verificador = listaDrones.buscarElmentos(dronIngresado)
+            if verificador == True:
+                
+                print(dronIngresado)
+                Dron = datoDron.datoDron(dronIngresado, contadorDrones)
+                listaDrones.Insertar(Dron)
+                nueva_ventana.destroy()
+            else:        
+                messagebox.showinfo("Error", "Este dron ya existe!")
+
+        boton_enviar=tk.Button(nueva_ventana, text="AGREGAR", command= obtenertexto)
+        boton_enviar.pack()
     
-    def sistemaDrones(self):
-        a=1
+    def sistemaDrones(self): 
+        archivo = ET.parse(file_path)
+        raiz = archivo.getroot()
+        listaSistemaDronesNombreClon = listaSimple.ListaSimple()
+        contadorSistemaDronesNombreClon = 0
+        listaAlturasMaximasClon = listaSimple.ListaSimple()
+        contadorAlturasMaximasClon = 0
+        listaCantidadDronesClon = listaSimple.ListaSimple()
+        contadorCantidadDronesClon = 0
+        listaDronesdelSistemaClon = listaSimple.ListaSimple()
+        contadorDronesdelSistemaClon = 0
+        listaAlturasValoresClon = listaSimple.ListaSimple()
+        contadorAlturasValoresClon = 0
+        r = open("sistemaDrones.dot", "w", encoding="utf-8")
+        r.write('''digraph G {
+	node [shape=circle]
+	nodo0 [label = "sistemas de drones"]
+	nodo0[fontcolor = black]''')
+        
+        for elementos in raiz:
+            for sistemaDrones in elementos.findall("sistemaDrones"):
+                contadorSistemaDronesNombreClon += 1
+                nombreSistema = str(sistemaDrones.get("nombre"))
+                SistemaDronesNombre = datoSistemaDronesNombre.datoSistemaDronesNombre(nombreSistema, contadorSistemaDronesNombreClon)
+                listaSistemaDronesNombreClon.Insertar(SistemaDronesNombre)
+                for alturaMaxima in sistemaDrones.findall("alturaMaxima"):
+                    contadorAlturasMaximasClon += 1
+                    altura = str(alturaMaxima.text)
+                    AlturasMaximas = datoAlturasMaximas.datoAlturasMaximas(altura, contadorAlturasMaximasClon)
+                    listaAlturasMaximasClon.Insertar(AlturasMaximas)
+                for cantidadDrones in sistemaDrones.findall("cantidadDrones"):
+                    contadorCantidadDronesClon += 1
+                    cantidad = str(cantidadDrones.text)
+                    CantidadDrones = datoCantidadDrones.datoCantidadDrones(cantidad, contadorCantidadDronesClon)
+                    listaCantidadDronesClon.Insertar(CantidadDrones)
+                for contenido in sistemaDrones.findall("contenido"):
+                    for dronesSistema in contenido.findall("dron"):
+                        contadorDronesdelSistemaClon += 1
+                        nombreDrones = str(dronesSistema.text)
+                        DronesdelSistema = datoDronesdelSistema.datoDronesdelSistema(nombreDrones, contadorDronesdelSistemaClon )
+                        listaDronesdelSistemaClon.Insertar(DronesdelSistema)
+                    for alturas in contenido.findall("alturas"):
+                        for alturaSistema in alturas.findall("altura"):
+                            contadorAlturasValoresClon += 1
+                            valor = str(alturaSistema.get("valor"))
+                            alturaValor = str(alturaSistema.text)
+                            AlturasValores = datoAlturasValores.datoAlturasValores(valor, alturaValor, contadorAlturasValoresClon)
+                            listaAlturasValoresClon.Insertar(AlturasValores)
+
+        for i in range(contadorSistemaDronesNombreClon):
+            var1 = int(listaAlturasMaximasClon.Pop().ObtenerNombre())
+            var2 = int(listaCantidadDronesClon.Pop().ObtenerNombre())
+            nombreSistema = listaSistemaDronesNombreClon.Pop().ObtenerNombre()
+            print("nombre: " + nombreSistema + " Altura Maxima " + str(var1) + " cantidad de drones " + str(var2))
+            for k in range(var2):    
+                nombre = listaDronesdelSistemaClon.Pop().ObtenerNombre()
+                print("nombre " + nombre)
+                for l in range(var1):
+                    nombreAltura = listaAlturasValoresClon.Pop().ObtenerNombre()
+                    print("nombre altura: " + nombreAltura)
+                    l += 1
+                k += 1
+            i += 1
+        
+        r.write('''
+}''')
+        r.close()
+        os.system("cmd /c dot -Tsvg sistemaDrones.dot > sistemaDrones.svg")
         
     def inicializar(self):
-        a=1
- 
+        global listaSistemasD
+        global listaInst
+        global listaDrones
+        listaSistemasD.InicializarSistema()
+        listaInst.InicializarSistema()
+        listaDrones.InicializarSistema()
+        messagebox.showinfo("Inicializar", "Se ha inicializado el sistema!")
+    
+    def ayuda(self):
+        messagebox.showinfo("Información", "Néstor Enrique Villatoro Avendaño\n202200252\nIntroducción a la Programación y Computacion 2 Sección C\nIngenieria en Ciencias y Sistemas\n4to Semestre")
 
 
 if __name__ == "__main__":
