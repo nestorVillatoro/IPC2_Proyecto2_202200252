@@ -1,4 +1,4 @@
-from .nodo_de_columna import NodoColumnas
+from .nodoColumnas import NodoColumnas
 
 class Columna:
     

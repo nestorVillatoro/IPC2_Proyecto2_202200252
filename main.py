@@ -4,7 +4,7 @@ from tkinter.scrolledtext import ScrolledText
 import xml.etree.ElementTree as ET
 import simple.listaSistemas as listaSistemas
 import simple.listaMensajes as listaMensajes
-import doble.lista_de_columna as lista_de_columna
+import doble.listaDeColumnas as listaDeColumnas
 import simple.listaSimple as listaSimple
 import simple.listaSimpleInstrucciones as listaSimpleInstrucciones
 import simple.listaSimpleColumnas as listaSimpleColumnas
@@ -276,7 +276,7 @@ class TextEditorApp:
             nombreSistema = listaSistemaDronesNombre.Pop().ObtenerNombre()
             listaInstruccionesDronesNombre = listaSimpleColumnas.ListaSimpleColumnas()
             for k in range(var2):    
-                listaDobleInstruccionesDrones = lista_de_columna.Columna()
+                listaDobleInstruccionesDrones = listaDeColumnas.Columna()
                 nombre = listaDronesdelSistema.Pop().ObtenerNombre()
                 for l in range(var1):
                     nombreAltura = listaAlturasValores.Pop().ObtenerNombre()
