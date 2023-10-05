@@ -1,5 +1,79 @@
 digraph G {
 	node [shape=circle]
 	nodo0 [label = "sistemas de drones"]
-	nodo0[fontcolor = black]
+	nodo0[fontcolor = black]	nodoNombre1[label = "SD1: "]
+	nodoAltura1[label = "Altura Máxima:  7 "]
+	nodoNombre1 -> nodoAltura1
+	nodoCant1[label = "Cantidad de drones:  3 "]
+	nodoAltura1 -> nodoCant1
+	nodoDron1[label = "Dron:  DronX "]
+	nodoNombre1 -> nodoDron1
+	nodoAlturas1[label = "  A "]
+	nodoDron1 -> nodoAlturas1
+	nodoAlturas2[label = "  I "]
+	nodoDron1 -> nodoAlturas2
+	nodoAlturas3[label = "  D "]
+	nodoDron1 -> nodoAlturas3
+	nodoAlturas4[label = "  F "]
+	nodoDron1 -> nodoAlturas4
+	nodoAlturas5[label = "  I "]
+	nodoDron1 -> nodoAlturas5
+	nodoAlturas6[label = "  J "]
+	nodoDron1 -> nodoAlturas6
+	nodoAlturas7[label = "  K "]
+	nodoDron1 -> nodoAlturas7
+	nodoDron2[label = "Dron:  DronY "]
+	nodoNombre1 -> nodoDron2
+	nodoAlturas8[label = "  2 "]
+	nodoDron2 -> nodoAlturas8
+	nodoAlturas9[label = "  C "]
+	nodoDron2 -> nodoAlturas9
+	nodoAlturas10[label = "  P "]
+	nodoDron2 -> nodoAlturas10
+	nodoAlturas11[label = "  G "]
+	nodoDron2 -> nodoAlturas11
+	nodoAlturas12[label = "  L "]
+	nodoDron2 -> nodoAlturas12
+	nodoAlturas13[label = "  M "]
+	nodoDron2 -> nodoAlturas13
+	nodoAlturas14[label = "  N "]
+	nodoDron2 -> nodoAlturas14
+	nodoDron3[label = "Dron:  DronZ "]
+	nodoNombre1 -> nodoDron3
+	nodoAlturas15[label = "  B "]
+	nodoDron3 -> nodoAlturas15
+	nodoAlturas16[label = "  C "]
+	nodoDron3 -> nodoAlturas16
+	nodoAlturas17[label = "  E "]
+	nodoDron3 -> nodoAlturas17
+	nodoAlturas18[label = "  H "]
+	nodoDron3 -> nodoAlturas18
+	nodoAlturas19[label = "  O "]
+	nodoDron3 -> nodoAlturas19
+	nodoAlturas20[label = "  P "]
+	nodoDron3 -> nodoAlturas20
+	nodoAlturas21[label = "  Q "]
+	nodoDron3 -> nodoAlturas21
+	nodoNombre2[label = "SDF: "]
+	nodoAltura2[label = "Altura Máxima:  1 "]
+	nodoNombre2 -> nodoAltura2
+	nodoCant2[label = "Cantidad de drones:  4 "]
+	nodoAltura2 -> nodoCant2
+	nodoDron4[label = "Dron:  DronW "]
+	nodoNombre2 -> nodoDron4
+	nodoAlturas22[label = "  I "]
+	nodoDron4 -> nodoAlturas22
+	nodoDron5[label = "Dron:  DronX "]
+	nodoNombre2 -> nodoDron5
+	nodoAlturas23[label = "  P "]
+	nodoDron5 -> nodoAlturas23
+	nodoDron6[label = "Dron:  DronY "]
+	nodoNombre2 -> nodoDron6
+	nodoAlturas24[label = "  C "]
+	nodoDron6 -> nodoAlturas24
+	nodoDron7[label = "Dron:  DronZ "]
+	nodoNombre2 -> nodoDron7
+	nodoAlturas25[label = "  2 "]
+	nodoDron7 -> nodoAlturas25
+
 }

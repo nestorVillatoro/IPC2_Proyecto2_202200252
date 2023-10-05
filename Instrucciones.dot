@@ -1,0 +1,43 @@
+digraph G {
+	node [shape=circle]
+	nodo0 [label = "Mensajes"]
+	nodo0[fontcolor = black]	nodoNombre1[label = "msg: "]
+	nodoSistema1[label = "Sistema de drones:  SD1 "]
+	nodoNombre1 -> nodoSistema1
+	nodoDron1[label = "DronX: "]
+	nodoNombre1 -> nodoDron1
+	nodoAltura1[label = "  2 "]
+	nodoDron1 -> nodoAltura1
+	nodoDron2[label = "DronY: "]
+	nodoNombre1 -> nodoDron2
+	nodoAltura2[label = "  3 "]
+	nodoDron2 -> nodoAltura2
+	nodoDron3[label = "DronZ: "]
+	nodoNombre1 -> nodoDron3
+	nodoAltura3[label = "  2 "]
+	nodoDron3 -> nodoAltura3
+	nodoDron4[label = "DronY: "]
+	nodoNombre1 -> nodoDron4
+	nodoAltura4[label = "  1 "]
+	nodoDron4 -> nodoAltura4
+	nodoNombre2[label = "msg2: "]
+	nodoSistema2[label = "Sistema de drones:  SDF "]
+	nodoNombre2 -> nodoSistema2
+	nodoDron5[label = "DronW: "]
+	nodoNombre2 -> nodoDron5
+	nodoAltura5[label = "  1 "]
+	nodoDron5 -> nodoAltura5
+	nodoDron6[label = "DronX: "]
+	nodoNombre2 -> nodoDron6
+	nodoAltura6[label = "  1 "]
+	nodoDron6 -> nodoAltura6
+	nodoDron7[label = "DronY: "]
+	nodoNombre2 -> nodoDron7
+	nodoAltura7[label = "  1 "]
+	nodoDron7 -> nodoAltura7
+	nodoDron8[label = "DronZ: "]
+	nodoNombre2 -> nodoDron8
+	nodoAltura8[label = "  1 "]
+	nodoDron8 -> nodoAltura8
+
+}

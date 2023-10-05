@@ -113,14 +113,19 @@ class TextEditorApp:
         self.menu_bar.add_cascade(label="XML", menu=self.file_menu)
         self.file_menu.add_command(label="Cargar un archivo", command=self.cargarArchivo)
         self.file_menu.add_command(label="Generar un archivo", command=self.generarArchivo)
-        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
 
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
         self.menu_bar.add_cascade(label="Drones", menu=self.file_menu)
         self.file_menu.add_command(label="Lista de drones", command=self.listaDrones)
         self.file_menu.add_command(label="Agregar un dron", command=self.agregarDron)
         self.file_menu.add_separator()
-
         self.file_menu.add_command(label="Sistemas de drones", command=self.sistemaDrones)
+
+        self.file_menu = tk.Menu(self.menu_bar, tearoff=0)
+        self.menu_bar.add_cascade(label="Gestión de mensajes", menu=self.file_menu)
+        self.file_menu.add_command(label="Lista de Mensajes", command=self.graficarInstrucciones)
+        self.file_menu.add_command(label="Instrucciones para enviar mensaje", command=self.agregarDron)
+
         self.menu_bar.add_command(label="Inicializar", command=self.inicializar)
         self.menu_bar.add_command(label="Ayuda", command=self.ayuda)
 
@@ -408,26 +413,118 @@ class TextEditorApp:
                             alturaValor = str(alturaSistema.text)
                             AlturasValores = datoAlturasValores.datoAlturasValores(valor, alturaValor, contadorAlturasValoresClon)
                             listaAlturasValoresClon.Insertar(AlturasValores)
-
+        Cnombre = 0
+        Cdrones = 0
+        Calturas = 0
+        text = ""
         for i in range(contadorSistemaDronesNombreClon):
+            Cnombre += 1
             var1 = int(listaAlturasMaximasClon.Pop().ObtenerNombre())
             var2 = int(listaCantidadDronesClon.Pop().ObtenerNombre())
             nombreSistema = listaSistemaDronesNombreClon.Pop().ObtenerNombre()
             print("nombre: " + nombreSistema + " Altura Maxima " + str(var1) + " cantidad de drones " + str(var2))
+
+            text += f"\tnodoNombre{Cnombre}" + f"[label = \"{str(nombreSistema)}: " + "\"]\n"
+            text += f"\tnodoAltura{Cnombre}" + "[label = \"Altura Máxima: " + f" {str(var1)} " + "\"]\n"
+            text += f"\tnodoNombre{Cnombre} -> nodoAltura{Cnombre}\n"
+            text += f"\tnodoCant{Cnombre}" + "[label = \"Cantidad de drones: " + f" {str(var2)} " + "\"]\n"
+            text += f"\tnodoAltura{Cnombre} -> nodoCant{Cnombre}\n"
+
             for k in range(var2):    
+                Cdrones += 1
                 nombre = listaDronesdelSistemaClon.Pop().ObtenerNombre()
+                text += f"\tnodoDron{Cdrones}" + "[label = \"Dron: " + f" {str(nombre)} " + "\"]\n"
+                text += f"\tnodoNombre{Cnombre} -> nodoDron{Cdrones}\n"
                 print("nombre " + nombre)
                 for l in range(var1):
+                    Calturas += 1
                     nombreAltura = listaAlturasValoresClon.Pop().ObtenerNombre()
+                    text += f"\tnodoAlturas{Calturas}" + "[label = \" " + f" {str(nombreAltura)} " + "\"]\n"
+                    text += f"\tnodoDron{Cdrones} -> nodoAlturas{Calturas}\n"
                     print("nombre altura: " + nombreAltura)
+
                     l += 1
                 k += 1
             i += 1
-        
+        r.write(text)
         r.write('''
 }''')
         r.close()
         os.system("cmd /c dot -Tsvg sistemaDrones.dot > sistemaDrones.svg")
+
+    def graficarInstrucciones(self): 
+        archivo = ET.parse(file_path)
+        raiz = archivo.getroot()
+        listaMensajesNombresClon = listaSimple.ListaSimple()
+        contadorMensajesNombresClon = 0
+        listaMensajesSistemaDronesClon = listaSimple.ListaSimple()
+        contadorMensajesSistemaDronesClon = 0 
+        listaMensajesInstruccionesClon = listaSimpleInstrucciones.ListaSimpleInstrucciones()
+        contadorMensajesInstruccionesClon = 0
+        listaMensajesInstrucciones2Clon = listaSimple.ListaSimple()
+        listaCantInstruccionesClon = listaSimple.ListaSimple()
+        r = open("Instrucciones.dot", "w", encoding="utf-8")
+        r.write('''digraph G {
+	node [shape=circle]
+	nodo0 [label = "Mensajes"]
+	nodo0[fontcolor = black]''')
+        
+        for elementos in raiz:
+            for Mensaje in  elementos.findall("Mensaje"):
+                contadorMensajesNombresClon += 1
+                nombreMensaje = str(Mensaje.get("nombre"))
+                MensajesNombres = datoMensajesNombres.datoMensajesNombres(nombreMensaje, contadorMensajesNombresClon)
+                listaMensajesNombresClon.Insertar(MensajesNombres)
+                for sistemadeDrones in  Mensaje.findall("sistemaDrones"):
+                    contadorMensajesSistemaDronesClon += 1
+                    sistema = str(sistemadeDrones.text)
+                    MensajesSistemaDrones = datoMensajesSistemaDrones.datoMensajesSistemaDrones(sistema, contadorMensajesSistemaDronesClon)
+                    listaMensajesSistemaDronesClon.Insertar(MensajesSistemaDrones)
+                for instrucciones in  Mensaje.findall("instrucciones"):
+                    contador = 0
+                    for instruccion in instrucciones.findall("instruccion"):
+                        contador += 1
+                        contadorMensajesInstruccionesClon += 1
+                        dron = str(instruccion.get("dron"))
+                        alturaDron = str(instruccion.text)
+                        MensajesInstrucciones = datoMensajesInstrucciones.datoMensajesInstrucciones(dron, contadorMensajesInstruccionesClon)
+                        MensajesInstrucciones2 = datoMensajesInstrucciones.datoMensajesInstrucciones(alturaDron, contadorMensajesInstruccionesClon)
+                        listaMensajesInstruccionesClon.Insertar(MensajesInstrucciones)
+                        listaMensajesInstrucciones2Clon.Insertar(MensajesInstrucciones2)
+                    elContador = datoContador.datoContador(contador)
+                    listaCantInstruccionesClon.Insertar(elContador)
+        Cnombre = 0
+        Cinstrucciones = 0
+        text = ""
+
+        for m in range(contadorMensajesNombres):
+            Cnombre += 1
+            var3 = listaMensajesNombresClon.Pop().ObtenerNombre()
+            var4 = listaMensajesSistemaDronesClon.Pop().ObtenerNombre()
+            var5 = int(listaCantInstruccionesClon.Pop().ObtenerNombre())
+            print("nombre del mensaje: " + var3)
+            print("sistema de drones: " + var4)
+            text += f"\tnodoNombre{Cnombre}" + f"[label = \"{str(var3)}: " + "\"]\n"
+            text += f"\tnodoSistema{Cnombre}" + "[label = \"Sistema de drones: " + f" {str(var4)} " + "\"]\n"
+            text += f"\tnodoNombre{Cnombre} -> nodoSistema{Cnombre}\n"
+            for n in range(var5):
+                Cinstrucciones += 1
+                name = str(listaMensajesInstruccionesClon.Pop().ObtenerNombre()) 
+                alt = str(listaMensajesInstrucciones2Clon.Pop().ObtenerNombre())
+                text += f"\tnodoDron{Cinstrucciones}" + f"[label = \"{str(name)}: " + "\"]\n"
+                text += f"\tnodoNombre{Cnombre} -> nodoDron{Cinstrucciones}\n"
+                text += f"\tnodoAltura{Cinstrucciones}" + "[label = \" " + f" {str(alt)} " + "\"]\n"
+                text += f"\tnodoDron{Cinstrucciones} -> nodoAltura{Cinstrucciones}\n"
+                print("dron: " + name + " altura " + str(alt))
+                n += 1
+            m += 1
+
+
+        r.write(text)
+        r.write('''
+}''')
+        r.close()
+        os.system("cmd /c dot -Tsvg Instrucciones.dot > Instrucciones.svg")
         
     def inicializar(self):
         global listaSistemasD
